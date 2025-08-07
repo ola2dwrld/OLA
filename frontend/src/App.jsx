@@ -3,6 +3,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { signup, login as loginApi } from './api'
 
 function App() {
   return (
@@ -31,17 +32,28 @@ function FeedPage() {
 function SignupPage() {
   const [form, setForm] = useState({ username: '', email: '', password: '' })
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
     if (!form.username || !form.email || !form.password) {
       setError('All fields are required')
       return
     }
     setError('')
-    alert('Signup form submitted!')
+    setLoading(true)
+    setSuccess(false)
+    try {
+      await signup(form)
+      setSuccess(true)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Signup failed')
+    } finally {
+      setLoading(false)
+    }
   }
   return (
     <div className="page-container">
@@ -51,7 +63,8 @@ function SignupPage() {
         <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} />
         <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} />
         {error && <div style={{ color: 'red' }}>{error}</div>}
-        <button type="submit">Sign Up</button>
+        {success && <div style={{ color: 'green' }}>Signup successful! You can now log in.</div>}
+        <button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Sign Up'}</button>
       </form>
     </div>
   )
@@ -59,17 +72,28 @@ function SignupPage() {
 function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
     if (!form.email || !form.password) {
       setError('Both fields are required')
       return
     }
     setError('')
-    alert('Login form submitted!')
+    setLoading(true)
+    setSuccess(false)
+    try {
+      await loginApi(form)
+      setSuccess(true)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Login failed')
+    } finally {
+      setLoading(false)
+    }
   }
   return (
     <div className="page-container">
@@ -78,7 +102,8 @@ function LoginPage() {
         <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} />
         <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} />
         {error && <div style={{ color: 'red' }}>{error}</div>}
-        <button type="submit">Login</button>
+        {success && <div style={{ color: 'green' }}>Login successful!</div>}
+        <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
       </form>
     </div>
   )
