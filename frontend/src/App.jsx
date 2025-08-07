@@ -1,9 +1,10 @@
-import { Routes, Route, NavLink } from 'react-router-dom'
+import { Routes, Route, NavLink, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { signup, login as loginApi } from './api'
+import { useAuth } from './contexts/AuthContext'
 
 function App() {
   return (
@@ -34,6 +35,8 @@ function SignupPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const { signup } = useAuth()
+  const navigate = useNavigate()
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -49,6 +52,7 @@ function SignupPage() {
     try {
       await signup(form)
       setSuccess(true)
+      setTimeout(() => navigate('/login'), 1000)
     } catch (err) {
       setError(err.response?.data?.error || 'Signup failed')
     } finally {
@@ -74,6 +78,8 @@ function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const { login } = useAuth()
+  const navigate = useNavigate()
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -87,8 +93,9 @@ function LoginPage() {
     setLoading(true)
     setSuccess(false)
     try {
-      await loginApi(form)
+      await login(form)
       setSuccess(true)
+      setTimeout(() => navigate('/'), 1000)
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed')
     } finally {
