@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, NavLink } from 'react-router-dom'
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -6,13 +6,22 @@ import './App.css'
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<FeedPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/upload" element={<UploadPage />} />
-      <Route path="/user/:username" element={<ProfilePage />} />
-    </Routes>
+    <>
+      <nav style={{ display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 24 }}>
+        <NavLink to="/" style={({ isActive }) => ({ fontWeight: isActive ? 'bold' : 'normal' })}>Feed</NavLink>
+        <NavLink to="/upload" style={({ isActive }) => ({ fontWeight: isActive ? 'bold' : 'normal' })}>Upload</NavLink>
+        <NavLink to="/signup" style={({ isActive }) => ({ fontWeight: isActive ? 'bold' : 'normal' })}>Sign Up</NavLink>
+        <NavLink to="/login" style={({ isActive }) => ({ fontWeight: isActive ? 'bold' : 'normal' })}>Login</NavLink>
+        <NavLink to="/user/demo" style={({ isActive }) => ({ fontWeight: isActive ? 'bold' : 'normal' })}>Profile</NavLink>
+      </nav>
+      <Routes>
+        <Route path="/" element={<FeedPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/upload" element={<UploadPage />} />
+        <Route path="/user/:username" element={<ProfilePage />} />
+      </Routes>
+    </>
   )
 }
 
