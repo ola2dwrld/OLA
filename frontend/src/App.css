@@ -1,0 +1,18 @@
+#root {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.page-container {
+  margin: 2rem 0;
+  padding: 2rem 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.read-the-docs {
+  color: #888;
+}
